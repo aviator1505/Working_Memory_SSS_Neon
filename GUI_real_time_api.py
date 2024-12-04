@@ -3,23 +3,25 @@
 #################################################################
 import sys
 import time
-import tkinter as tk
-from tkinter import messagebox
+
+from tkinter import *
+from tkinter import ttk
 from pupil_labs.realtime_api.simple import Device
 
 # Start GUI window
-window = tk.Tk()
+window = tk()
 window.geometry('500x500')
-window.title('Dual Mobile Eye Tracking Study')
+window.title('SSS Working Memory Study')
 
 # Instantiate list of devices and list of ips
-# todo: specify your number of devices
-num_devices = 2
+
+num_devices = 1
 devices = []
 ips = []
 recording_ids = []
 recording_id = ""
-events = ["smalltalk", "fastfriends", "end"]
+events = ["Sit", "Stand", "Swivel", "end"]
+
 previous_events = []
 
 
@@ -40,8 +42,8 @@ def button_search_on_click():
 
     label1 = tk.Label(dialog, text="Enter 1st cellphone IP Address")
     label1.pack(pady=10)
-    label2 = tk.Label(dialog, text="Enter 2nd cellphone IP Address")
-    label2.pack(pady=10)
+    # label2 = tk.Label(dialog, text="Enter 2nd cellphone IP Address")
+    # label2.pack(pady=10)
 
     entry1 = tk.Entry(dialog, width=30)
     entry1.insert(0, "192.168.2.101")
@@ -91,9 +93,7 @@ def button_add_event_on_click():
             try:
                 if len(previous_events) > 0:
                     devices[0].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-                    devices[1].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
                 devices[0].send_event(f"start_{phase}", event_timestamp_unix_ns=time.time_ns())
-                devices[1].send_event(f"start_{phase}", event_timestamp_unix_ns=time.time_ns())
                 previous_events.append(f"{phase}")
             except:
                 messagebox.showinfo('Error', 'Unable to send event')
@@ -101,16 +101,14 @@ def button_add_event_on_click():
     ok_button.pack(pady=10)
 
 
-def button_smalltalk_on_click():
+def button_stand_on_click():
     try:
         if len(previous_events) > 0:
             devices[0].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-            devices[1].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-        devices[0].send_event(f"start_smalltalk", event_timestamp_unix_ns=time.time_ns())
-        devices[1].send_event(f"start_smalltalk", event_timestamp_unix_ns=time.time_ns())
-        previous_events.append(f"smalltalk")
-        button_smalltalk.configure(bg="green")
-        button_ff.configure(bg="lightgrey")
+        devices[0].send_event(f"start_stand", event_timestamp_unix_ns=time.time_ns())
+        previous_events.append(f"stand")
+        button_stand.configure(bg="green")
+        button_sit.configure(bg="lightgrey")
     except:
         messagebox.showinfo('Error', 'Unable to send event')
 
@@ -119,12 +117,10 @@ def button_ff_on_click():
     try:
         if len(previous_events) > 0:
             devices[0].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-            devices[1].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-        devices[0].send_event(f"start_fastfriends", event_timestamp_unix_ns=time.time_ns())
-        devices[1].send_event(f"start_fastfriends", event_timestamp_unix_ns=time.time_ns())
-        previous_events.append(f"fastfriends")
-        button_ff.configure(bg="green")
-        button_smalltalk.configure(bg="lightgrey")
+        devices[0].send_event(f"start_sit", event_timestamp_unix_ns=time.time_ns())
+        previous_events.append(f"sit")
+        button_sit.configure(bg="green")
+        button_stand.configure(bg="lightgrey")
     except:
         messagebox.showinfo('Error', 'Unable to send event')
 
@@ -133,20 +129,17 @@ def button_end_on_click():
     try:
         if len(previous_events) > 0:
             devices[0].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-            devices[1].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
-        devices[0].send_event(f"end_conversation", event_timestamp_unix_ns=time.time_ns())
-        devices[1].send_event(f"end_conversation", event_timestamp_unix_ns=time.time_ns())
+        devices[0].send_event(f"end_posture", event_timestamp_unix_ns=time.time_ns())
         button_end.configure(bg="green")
-        button_smalltalk.configure(bg="lightgrey")
-        button_ff.configure(bg="lightgrey")
+        button_stand.configure(bg="lightgrey")
+        button_sit.configure(bg="lightgrey")
     except:
         messagebox.showinfo('Error', 'Unable to send event')
 
 
 def button_sq_on_click():
     try:
-        devices[0].send_event(f"start_question", event_timestamp_unix_ns=time.time_ns())
-        devices[1].send_event(f"start_question", event_timestamp_unix_ns=time.time_ns())
+        devices[0].send_event(f"start_posture", event_timestamp_unix_ns=time.time_ns())
         button_startquestion.configure(bg="green")
     except:
         messagebox.showinfo('Error', 'Unable to send event')
@@ -155,7 +148,6 @@ def button_sq_on_click():
 def button_eq_on_click():
     try:
         devices[0].send_event(f"end_question", event_timestamp_unix_ns=time.time_ns())
-        devices[1].send_event(f"end_question", event_timestamp_unix_ns=time.time_ns())
         button_startquestion.configure(bg="lightgrey")
     except:
         messagebox.showinfo('Error', 'Unable to send event')
@@ -192,8 +184,9 @@ end_frame = tk.LabelFrame(window, text='End')
 button_search = tk.Button(start_frame, text='Find Devices', command=button_search_on_click)
 button_record = tk.Button(start_frame, text='Start Recording', command=button_record_on_click)
 
-button_smalltalk = tk.Button(events_frame, text='Start Smalltalk', command=button_smalltalk_on_click)
-button_ff = tk.Button(events_frame, text='Start Fast Friends', command=button_ff_on_click)
+button_stand = tk.Button(events_frame, text='Start Stand', command=button_stand_on_click)
+button_sit = tk.Button(events_frame, text='Start Sit', command=button_sit_on_click)
+button_swivel = tk.Button(events_frame, text='Start Swivel', command=button_swivel_on_click)
 button_startquestion = tk.Button(events_frame, text='Start Reading Out Question', command=button_sq_on_click)
 button_endquestion = tk.Button(events_frame, text='End Reading Out Question', command=button_eq_on_click)
 button_end = tk.Button(events_frame, text='End Conversation', command=button_end_on_click)

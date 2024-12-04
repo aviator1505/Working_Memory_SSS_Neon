@@ -33,6 +33,7 @@ def connect_imus(mac_addresses):
         except Exception as ex:
             print(f"Failed to connect to {address}: {ex}")
     return connected_devices
+
 def tracker_recording(ip_address):
     try:
         device = Device(ip_address, "8080")
@@ -49,8 +50,8 @@ def tracker_recording(ip_address):
 def main():
     # Predefined MAC addresses for MetaWear IMUs
     imu_mac_addresses = [
-        "EA:2B:2B:1A:83:0D",  # Replace with actual MAC address
-        "F2:B7:E2:CC:2E:40"   # Replace with actual MAC address
+        "EA:2B:2B:1A:83:0D",
+        "F2:B7:E2:CC:2E:40"
     ]
 
     # Connect to IMUs
