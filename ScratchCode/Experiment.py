@@ -3,7 +3,7 @@ from itertools import permutations
 import time
 import csv
 from datetime import datetime
-from pupil_labs.realtime_api.simple import Device
+from pupil_labs.realtime_api.simple import *
 from mbientlab.metawear import MetaWear, libmetawear
 import queue
 import threading
@@ -71,7 +71,7 @@ class BlockCopyingExperiment:
         """
         try:
             # Initialize Pupil Labs Neon eye tracker
-            self.eye_tracker = Device("YOUR_DEVICE_ADDRESS")
+            self.eye_tracker = discover_one_device()
             print("Eye tracker initialized successfully")
 
             # Initialize chest IMU
