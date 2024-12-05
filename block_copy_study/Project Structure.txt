@@ -1,0 +1,20 @@
+
+block_copy_study/
+├── main.py                  # Main experiment runner
+├── hardware/
+│   ├── __init__.py
+│   ├── eye_tracker.py      # Neon eye tracker interface
+│   ├── motion_tracker.py   # MbientLab IMU interface
+│   └── synchronizer.py     # Data synchronization utilities
+├── visualization/
+│   ├── __init__.py
+│   ├── real_time_viz.py    # Real-time data visualization
+│   └── analysis_viz.py     # Post-hoc analysis visualization
+├── experiment/
+│   ├── __init__.py
+│   ├── trial_manager.py    # Trial sequencing and management
+│   └── data_logger.py      # Data logging and storage
+└── utils/
+    ├── __init__.py
+    ├── calibration.py      # IMU calibration utilities
+    └── coordinate_sys.py   # Coordinate system transformations

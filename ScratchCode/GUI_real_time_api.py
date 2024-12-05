@@ -113,7 +113,7 @@ def button_stand_on_click():
         messagebox.showinfo('Error', 'Unable to send event')
 
 
-def button_ff_on_click():
+def button_sit_on_click():
     try:
         if len(previous_events) > 0:
             devices[0].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
@@ -124,6 +124,17 @@ def button_ff_on_click():
     except:
         messagebox.showinfo('Error', 'Unable to send event')
 
+def button_swivel_on_click():
+    try:
+        if len(previous_events) > 0:
+            devices[0].send_event(f"end_{previous_events[-1]}", event_timestamp_unix_ns=time.time_ns())
+        devices[0].send_event(f"start_swivel", event_timestamp_unix_ns=time.time_ns())
+        previous_events.append(f"swivel")
+        button_sit.configure(bg="green")
+        button_stand.configure(bg="lightgrey")
+        button_swivel.configure(bg="lightgrey")
+    except:
+        messagebox.showinfo('Error', 'Unable to send event')
 
 def button_end_on_click():
     try:
@@ -198,8 +209,9 @@ start_frame.pack(expand='yes', fill='both')
 button_search.pack(pady=10)
 button_record.pack(pady=10)
 events_frame.pack(expand='yes', fill='both')
-button_smalltalk.pack(pady=10)
-button_ff.pack(pady=10)
+button_stand.pack(pady=10)
+button_sit.pack(pady=10)
+button_swivel   .pack(pady=10)
 button_startquestion.pack(pady=10)
 button_endquestion.pack(pady=10)
 end_frame.pack(expand='yes', fill='both')
@@ -209,8 +221,8 @@ button_cancel.pack(pady=10)
 
 button_search.configure(bg="lightgrey")
 button_record.configure(bg="lightgrey")
-button_smalltalk.configure(bg="lightgrey")
-button_ff.configure(bg="lightgrey")
+button_stand.configure(bg="lightgrey")
+button_sit.configure(bg="lightgrey")
 button_startquestion.configure(bg="lightgrey")
 button_endquestion.configure(bg="lightgrey")
 button_end.configure(bg="lightgrey")

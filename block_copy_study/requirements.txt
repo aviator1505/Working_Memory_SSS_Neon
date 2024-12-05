@@ -1,0 +1,7 @@
+numpy
+matplotlib
+seaborn
+pandas
+pupil-labs-realtime-api
+mbientlab-metawear
+scipy
